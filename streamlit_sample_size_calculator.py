@@ -47,7 +47,7 @@ def main():
         """
                     * LinkedIn: [linkedin.com/in/lucasbraga461](https://linkedin.com/in/lucasbraga461/)
                     * GitHub: [github.com/lucasbraga461/sample-size-calculator](https://github.com/lucasbraga461/sample-size-calculator/)
-                    * Published article: [Mastering Sample Size Calculations @Towards Data Science](https://towardsdatascience.com/mastering-sample-size-calculations-75afcddd2ff3#d3c3-991622ae7694)
+                    * Published article: [Mastering Sample Size Calculations @Towards Data Science](https://towardsdatascience.com/mastering-sample-size-calculations-75afcddd2ff3)
         """
     )
     if option == "Comparing Two Means (for AB Testing)":
