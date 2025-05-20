@@ -3,6 +3,15 @@
 This document provides clear mathematical formulas used by the **Sample Size Calculator** application. These formulas cover the four most common scenarios encountered in statistical testing and experimentation:
 
 ---
+### Standard Error (Central Limit Theorem)
+
+The standard error for the mean estimator, based on the Central Limit Theorem, is calculated as:
+
+$$
+\text{SE} = \frac{\sigma}{\sqrt{n}}
+$$
+
+---
 
 ### 1. Comparing Two Means (A/B Testing)
 
