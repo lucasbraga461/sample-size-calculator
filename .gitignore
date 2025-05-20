@@ -12,8 +12,8 @@ models/
 
 # data
 *.parquet
-*.csv
-data/
+# *.csv
+# data/
 
 # Distribution / packaging
 .Python
