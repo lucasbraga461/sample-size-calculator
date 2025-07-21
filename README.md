@@ -2,7 +2,7 @@
 
 This repository contains the code used to create the **Sample Size Calculator** application, accessible here:
 
-👉 [**CALCULATOR CLICK HERE**](http://ec2-56-125-4-40.sa-east-1.compute.amazonaws.com:8080/)  
+👉 [**CALCULATOR CLICK HERE**](http://18.231.252.63:8080/)  
 
 Built in **Python**, this calculator is deployed on **Google Cloud Run** (serverless) using a **Docker container** and **Streamlit**.
 
