@@ -2,7 +2,7 @@
 
 This repository contains the code used to create the **Sample Size Calculator** application, accessible here:
 
-👉 [**CALCULATOR CLICK HERE**](http://18.231.252.63:8080/)  
+👉 [**CALCULATOR CLICK HERE**](https://huggingface.co/spaces/lucasbraga461/streamlit_sample_size_calculator)  
 
 Built in **Python**, this calculator is deployed on **Google Cloud Run** (serverless) using a **Docker container** and **Streamlit**.
 
@@ -94,3 +94,17 @@ To install them, run:
 ```bash
 pip install -r requirements.txt
 ```
+
+---
+
+## 🌟 **Part of My Data Science Portfolio**
+
+This repository is part of my comprehensive data science portfolio showcasing research, publications, and production-ready ML systems.
+
+**🎯 [View Complete Portfolio](https://lucasbraga461.github.io)** | **👤 [GitHub Profile](https://github.com/lucasbraga461)**
+
+### **Related Projects:**
+- **🧠 [Active Learning Research](https://github.com/lucasbraga461/active-learning)** - IEEE Access publication on imbalanced classification
+- **🚨 [Real-Time ML Fraud Detection](https://github.com/lucasbraga461/realtime-ml-fraud-detection)** - IEEE Access publication on comparative ML study
+- **📖 [Secure DS Apps Book](https://github.com/lucasbraga461/deploy-secure-ds-apps-book)** - Apress/Springer book on cloud deployment
+- **🌐 [Feature Engineering from Websites](https://github.com/lucasbraga461/feat-eng-websites)** - Automated website quality scoring
