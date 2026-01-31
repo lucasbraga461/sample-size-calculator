@@ -9,7 +9,32 @@ d_oneprop = "docs/d.one_prop.png"
 
 # Functions for sample size calculations
 def sample_size_comparing_two_means(variance, z_alpha, z_beta, delta):
+    """Equal allocation (50/50) per-group sample size for two-sample means."""
     return math.ceil((2 * variance * (z_alpha + z_beta) ** 2) / (delta ** 2))
+
+def sample_size_unequal_allocation(variance, z_alpha, z_beta, delta, p_t):
+    """
+    Unequal allocation sample sizes for two-sample means.
+    variance: sigma^2
+    z_alpha: Z_{1-alpha/2}
+    z_beta: Z_{1-beta}
+    delta: absolute MDE
+    p_t: treatment proportion (e.g. 0.03 for 3%)
+    Returns: dict with keys: n_t (treatment), n_c (control), n_total
+    """
+    if not (0.0 < p_t < 1.0):
+        raise ValueError("p_t must be in (0,1)")
+
+    p_c = 1.0 - p_t
+    # allocation ratio k = n_t / n_c = p_t / p_c
+    k = p_t / p_c
+    zsum = z_alpha + z_beta
+    # compute control group size using derived formula
+    n_c = (variance * (1.0 + 1.0 / k) * (zsum ** 2)) / (delta ** 2)
+    n_c = math.ceil(n_c)
+    # treatment group size
+    n_t = math.ceil(k * n_c)
+    return {"n_t": n_t, "n_c": n_c, "n_total": n_t + n_c}
 
 def sample_size_comparing_two_proportions(p1, p2, z_alpha, z_beta):
     numerator = (z_alpha + z_beta) ** 2 * ((p1 * (1 - p1)) + (p2 * (1 - p2)))
@@ -126,13 +151,42 @@ def main():
 
         delta = st.number_input("Enter the difference you want to detect (δ)", value=0.5)
 
+        st.markdown("----")
+        st.write("Allocation options:")
+        allocation_mode = st.radio("Choose allocation", ("Equal 50/50", "Custom proportion (treatment %)"), index=0)
+        if allocation_mode == "Custom proportion (treatment %)":
+            p_t = st.number_input("Enter treatment proportion p_t (e.g. 0.03 for 3%)", min_value=0.0001, max_value=0.9999, value=0.03, format="%.6f", step=0.01)
+        else:
+            p_t = 0.5
+
+        # optional: MAU input to compute months needed
+        mau = st.number_input("Optional: Enter MAU (Monthly Active Users) to estimate months needed", value=0, step=1)
+
         if st.button("Calculate"):
-            result = sample_size_comparing_two_means(variance, z_alpha, z_beta, delta)
-            total_samples = result * 2
-            st.success(f"The required sample size per group is: {result:,}, so if you have two groups (control and treatment), "
-                       f"you need a total of {total_samples:,} samples.")
-            st.write(f"Inputs: Variance (σ²) = {variance}, Difference to detect (δ) = {delta}, "
-                     f"Z-value for Confidence = {z_alpha}, Z-value for Power = {z_beta}")
+            try:
+                # Equal 50/50 branch
+                if abs(p_t - 0.5) < 1e-9:
+                    result = sample_size_comparing_two_means(variance, z_alpha, z_beta, delta)
+                    total_samples = result * 2
+                    st.success(f"The required sample size per group (50/50) is: {result:,}, total = {total_samples:,}.")
+                    st.write(f"Inputs: Variance (σ²) = {variance}, Difference to detect (δ) = {delta}, "
+                             f"Z-value for Confidence = {z_alpha}, Z-value for Power = {z_beta}")
+                else:
+                    # Unequal allocation branch
+                    sizes = sample_size_unequal_allocation(variance, z_alpha, z_beta, delta, p_t)
+                    st.success(f"Unequal allocation results (treatment share = {p_t*100:.3f}%):")
+                    st.write(f"Treatment (n_t): {sizes['n_t']:,}")
+                    st.write(f"Control (n_c):   {sizes['n_c']:,}")
+                    st.write(f"Total (n_total): {sizes['n_total']:,}")
+                    st.write(f"Inputs: Variance (σ²) = {variance}, Difference to detect (δ) = {delta}, "
+                             f"Z-value for Confidence = {z_alpha}, Z-value for Power = {z_beta}")
+                    if mau and mau > 0:
+                        monthly_treatment = mau * p_t
+                        months_needed = sizes['n_t'] / monthly_treatment
+                        st.write(f"Given MAU = {mau:,} and treatment share {p_t:.4f}, monthly treatment ≈ {monthly_treatment:,.1f} users.")
+                        st.info(f"Estimated months to reach treatment sample: {months_needed:.2f} months (approx).")
+            except Exception as e:
+                st.error(f"Error in calculation: {e}")
 
     elif option == "Comparing Two Proportions (for AB Testing)":
         # Input for proportions
